@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Compact and Fast 3D Feature Fields">
+  <meta name="keywords" content="3D Gaussian Splatting, Semantic Feature Fields, Feature Field Compression">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CF3: Compact and Fast 3D Feature Fields</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/style.css">
+
+  <link rel="icon" href="./static/images/cf3_logo.png">
+</head>
+
+<body>
+<section class="section" id="title">
+  <div class="columns is-centered">
+    <div class="column has-text-centered">
+      <div class="title-container">
+        <h1 class="is-size-1 publication-title">
+          CF3: Compact and Fast 3D Feature Fields
+        </h1>
+      </div>
+      
+      <div class="is-size-5 publication-authors">
+  <span class="author-block"><a href="https://www.linkedin.com/in/hyunjoon-lee-05057427a/">Hyunjoon Lee</a>,</span>
+  <span class="author-block"><a href="https://www.linkedin.com/in/joonkyumin/">Joonkyu Min</a>,</span>
+  <span class="author-block"><a href="https://jaesik.info/">Jaesik Park</a><sup>*</sup></span>
+</div>
+
+<affiliations>
+  <div class="is-size-5 publication-authors">
+    <span class="author-block">Seoul National University</span>
+  </div>
+  <div class="is-size-6 subtitle">
+    * Corresponding author
+  </div>
+</affiliations>
+
+<br>
+
+<vendor>  
+  <div class="is-size-5 subtitle">
+    ICCV 2025
+  </div>
+</vendor>
+      
+      <div class="column has-text-centered" style="margin-top: -20px;">
+        <div class="publication-links" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+          <!-- <a href="./Targetless LiDAR-Camera Calibration with Anchored 3D Gaussians.pdf"
+             class="highlighted-link-black paper-link pulse-b">
+            <span class="icon">
+              <i class="fas fa-file-pdf"></i>
+            </span>
+            <span>Paper</span>
+          </a> -->
+          <a href="http://arxiv.org/abs/2508.05254" class="highlighted-link arxiv-link pulse-y">
+            <span class="icon">
+              <i class="ai ai-arxiv"></i>
+            </span>
+            <span>arXiv</span>
+          </a>
+          <!--<a href="" class="highlighted-link github-link pulse-gn">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span>Code</span>-->
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaser + TL;DR -->
+<section class="hero" id="teaser">
+  <div class="hero-body" style="padding-top: 0;">
+    <div class="container is-max-desktop">
+      <!-- TL;DR -->
+      <p class="has-text-centered" style="font-size:1.05rem; line-height:1.6; margin-bottom: 1rem;">
+        <strong>TL;DR:</strong>
+        We propose a method to build compact and fast 3D Gaussian feature fields by effectively compressing and sparsifying Gaussians, achieving competitive performance with significantly fewer gaussians.
+
+      <!-- Teaser image -->
+      <figure>
+        <img src="./static/images/overview.png"
+             alt="Teaser of CF3: Compact and Fast 3D Feature Fields"
+             class="image is-fullwidth">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- Abstract. -->
+<br><br>
+<section class="hero is-light" id="description">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full is-12-mobile is-10-tablet is-8-desktop">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            3D Gaussian Splatting (3DGS) has begun incorporating rich information from 2D foundation models. However, most approaches rely on a bottom-up optimization process that treats raw 2D features as ground truth, incurring increased computational costs. We propose a top-down pipeline for constructing compact and fast 3D Gaussian feature fields, namely, CF3. We first perform a fast weighted fusion of multi-view 2D features with pre-trained Gaussians. This approach enables training a per-Gaussian autoencoder directly on the lifted features, instead of training autoencoders in the 2D domain. As a result, the autoencoder better aligns with the feature distribution. More importantly, we introduce an adaptive sparsification method that optimizes the Gaussian attributes of the feature field while pruning and merging the redundant Gaussians, constructing an efficient representation with preserved geometric details. Our approach achieves a competitive 3D feature field using as little as 5% of the Gaussians compared to Feature-3DGS.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+    
+<!-- Overview. -->
+<section class="hero" id="description">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <h2 class="title is-3">Method</h2>
+          <figure>
+            <img src="./static/images/pipeline.png" alt="method overview" class="image is-fullwidth" style="background-color: white;">
+            <figcaption style="text-align: left; margin-top: 10px; font-size: small;">
+              <strong>Overview of our CF3 pipeline.</strong> We utilize pre-trained 3D Gaussians to construct a 3D feature field. We adopt a weighted-sum strategy to lift features extracted from a visual foundation model into 3D. Subsequently, a per-Gaussian autoencoder compresses high-dimensional features into lower-dimensional embeddings, effectively removing noisy features through a variance filtering step. Afterward, adaptive sparsification merges redundant Gaussians, efficiently reducing the total Gaussian count and resulting in a compact 3D feature field.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="content">
+        The primary contributions of this work are as follows:
+        <ol>
+          <li>We build a compact 3D feature field by lifting features via a pre-trained 3DGS and compressing them with a per-Gaussian autoencoder. This ensures robustness across downstream tasks since each Gaussian directly encodes view-consistent reference features.</li>
+          <li>Our adaptive sparsification step optimizes the Gaussian feature field even further, which involves pruning and merging redundant Gaussians, while preserving essential details. As a result, our method achieves competitive performance while using as little as 5% of the original number of Gaussians, improving storage efficiency and rendering speed.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<br>
+<section class="hero" id="joint_optimization">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Adaptive Sparsification</h2><br>
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <div class="video-container-nr">
+            <figure>
+              <video src="./mp4/sparsification.mp4" 
+                     autoplay 
+                     loop 
+                     muted 
+                     playsinline 
+                     class="image is-fullwidth" 
+                     style="background-color: white;">
+              </video>
+                <figcaption style="text-align: left; margin-top: 10px; font-size: small;">
+                  <strong>Figure 2.</strong> Unlike the original 3D Gaussian Splatting, which preserves fine-grained details for photorealistic rendering, our method focuses on feature field reconstruction and merges redundant Gaussians to reduce unnecessary density, achieving effective sparsification.
+                </figcaption>
+            </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- LERF -->
+<section class="hero" id="results">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: 0.3rem;">
+        LERF Dataset Results
+      </h2>
+      <!-- 부제목 -->
+      <p class="has-text-centered" style="font-size: 1.1rem; color: #555; margin-top: 0; margin-bottom: 0.5rem;">
+        SAM+CLIP Features
+      </p>
+      <br>
+      <div class="buttons is-centered mb-4">
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="ramen">ramen</button>
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="figurines">figurines</button>
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="waldo">waldo kitchen</button>
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="teatime">teatime</button>
+      </div>
+
+      <div class="dataset-videos" data-dataset="ramen">
+        <video src="./mp4/ramen_c.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+      <div class="dataset-videos" data-dataset="figurines" style="display:none;">
+        <video src="./mp4/figurines_c.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+      <div class="dataset-videos" data-dataset="waldo" style="display:none;">
+        <video src="./mp4/waldo_c.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+      <div class="dataset-videos" data-dataset="teatime" style="display:none;">
+        <video src="./mp4/teatime_c.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+      <figcaption style="text-align: left; margin-top: 10px; font-size: small;">
+              *Note that LangSplat uses three-levels mask(Whole, Part, SubPart), whereas we evaluate using a fixed mask level. We visualize results using the Whole mask.
+      </figcaption>
+    </div>
+  </div>
+</section>
+
+<!-- Replica -->
+<section class="hero" id="results_room">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: 0.3rem;">
+        Replica Dataset Results 
+      </h2>
+      <!-- 부제목 -->
+      <p class="has-text-centered" style="font-size: 1.1rem; color: #555; margin-top: 0; margin-bottom: 0.5rem;">
+        MaskCLIP Features
+      </p>
+      <br>
+
+      <div class="buttons is-centered mb-4">
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="room0">room0</button>
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="room1">room1</button>
+        <button class="button is-medium is-rounded dataset-btn" data-dataset="office4">office4</button>
+      </div>
+
+      <div class="dataset-videos" data-dataset="room0">
+        <video src="./mp4/room0_c_revised.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+      <div class="dataset-videos" data-dataset="room1" style="display:none;">
+        <video src="./mp4/room1_c_revised.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+      <div class="dataset-videos" data-dataset="office4" style="display:none;">
+        <video src="./mp4/office4_c_revised.mp4" autoplay loop muted playsinline class="image is-fullwidth"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  function setupSection(rootId) {
+    const root = document.querySelector(rootId);
+    if (!root) return;
+
+    const buttons = root.querySelectorAll('.dataset-btn');
+    const blocks  = root.querySelectorAll('.dataset-videos');
+
+    // 초기 상태: 첫 영상만 보이고, 버튼은 전부 기본 스타일(하이라이트 없음)
+    if (blocks.length) {
+      blocks.forEach((b, i) => b.style.display = (i === 0 ? 'block' : 'none'));
+    }
+
+    // 클릭 시에만 선택 스타일 부여 (active / is-active 둘 다 지원)
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-dataset');
+
+        // 버튼 하이라이트 갱신
+        buttons.forEach(b => b.classList.remove('active', 'is-active'));
+        btn.classList.add('active', 'is-active'); // 테마가 어느 쪽을 쓰든 대응
+
+        // 영상 전환
+        blocks.forEach(b => {
+          b.style.display = (b.getAttribute('data-dataset') === key) ? 'block' : 'none';
+        });
+      });
+    });
+  }
+
+  setupSection('#results');
+  setupSection('#results_room');
+});
+</script>
+
+<!-- Large Scale Dataset (KITTI) Results -->
+<section class="hero" id="results_kitti">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: 0.3rem;">
+        Large Scale Dataset (KITTI) Results</h2>
+      <!-- 부제목 -->
+      <p class="has-text-centered" style="font-size: 1.1rem; color: #555; margin-top: 0; margin-bottom: 0.5rem;">
+        SAM+CLIP Features
+      </p>
+      <br>
+
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <video src="./mp4/kitti_crop.mp4"
+                 autoplay
+                 loop
+                 muted
+                 playsinline
+                 class="image is-fullwidth">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Custom Dataset Results -->
+<section class="hero" id="results_custom">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: 0.3rem;">
+        Custom Dataset Results</h2>
+      <!-- 부제목 -->
+      <p class="has-text-centered" style="font-size: 1.1rem; color: #555; margin-top: 0; margin-bottom: 0.5rem;">
+        SAM+CLIP Features
+      </p>
+      <br>
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <video src="./mp4/snu_c.mp4"
+                 autoplay
+                 loop
+                 muted
+                 playsinline
+                 class="image is-fullwidth">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<br><br>
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+<pre><code>@misc{lee2025cf3compactfast3d,
+      title={CF3: Compact and Fast 3D Feature Fields}, 
+      author={Hyunjoon Lee and Joonkyu Min and Jaesik Park},
+      year={2025},
+      eprint={2508.05254},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2508.05254}, 
+}</code></pre>
+
+  <br>
+  <h2 class="is-hidden-mobile title">Reference</h2>
+  <p style="font-size: small;" class="is-hidden-mobile">
+    [1] Zhou, Shijie, et al. "Feature 3dgs: Supercharging 3d gaussian splatting to enable distilled feature fields." Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2024.<br>
+    [2] Qin, Minghan, et al. "Langsplat: 3d language gaussian splatting." Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2024.<br>
+    [3] Zhou, Chong, Chen Change Loy, and Bo Dai. "Extract free dense labels from clip." European conference on computer vision. Cham: Springer Nature Switzerland, 2022.
+  </p>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered is-mobile">
+      <div class="column is-10-mobile is-8-tablet is-8-desktop">
+        <div class="content has-text-centered-mobile">
+          <p>
+            We thank the authors of
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+            and <a href="https://zang09.github.io/tlc-calib-site/">TLC-Calib</a>
+            for inspiring this website.<br>
+            This work is shared under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script defer src="./static/js/fontawesome.all.min.js"></script>
+<script src="./static/js/bulma-carousel.min.js"></script>
+<script src="./static/js/bulma-slider.min.js"></script>
+<script src="./static/js/main.js"></script>
+
+<!-- <script>
+  bulmaCarousel.attach('.results-carousel', { slidesToScroll: 1, slidesToShow: 1, autoplay: true, loop: true });
+</script> -->
+
+</body>
+</html>
