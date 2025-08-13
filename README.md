@@ -1,1 +1,1 @@
-# Targetless LiDAR-Camera Calibration with Anchored 3D Gaussians Project Page
+# CF3: Compact and Fast 3D Feature Fields Project Page
