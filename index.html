@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/style.css">
 
-  <link rel="icon" href="./static/images/cf3_logo.png">
+  <link rel="icon" href="./static/images/cf3_logo.jpg">
 </head>
 
 <body>
@@ -90,7 +90,7 @@
 
       <!-- Teaser image -->
       <figure>
-        <img src="./static/images/overview.png"
+        <img src="./static/images/overview.jpg"
              alt="Teaser of CF3: Compact and Fast 3D Feature Fields"
              class="image is-fullwidth">
       </figure>
@@ -124,7 +124,7 @@
         <div class="column is-full">
           <h2 class="title is-3">Method</h2>
           <figure>
-            <img src="./static/images/pipeline.png" alt="method overview" class="image is-fullwidth" style="background-color: white;">
+            <img src="./static/images/pipeline.jpg" alt="method overview" class="image is-fullwidth" style="background-color: white;">
             <figcaption style="text-align: left; margin-top: 10px; font-size: small;">
               <strong>Overview of our CF3 pipeline.</strong> We utilize pre-trained 3D Gaussians to construct a 3D feature field. We adopt a weighted-sum strategy to lift features extracted from a visual foundation model into 3D. Subsequently, a per-Gaussian autoencoder compresses high-dimensional features into lower-dimensional embeddings, effectively removing noisy features through a variance filtering step. Afterward, adaptive sparsification merges redundant Gaussians, efficiently reducing the total Gaussian count and resulting in a compact 3D feature field.
             </figcaption>
